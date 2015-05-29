@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
                 fm.findFragmentById(R.id.activity_main_navigation_drawer);
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
-        navigationDrawer.setup(drawerLayout, toolbar);
+        navigationDrawer.setup(R.id.activity_main_navigation_drawer, drawerLayout, toolbar);
     }
 
     @Override

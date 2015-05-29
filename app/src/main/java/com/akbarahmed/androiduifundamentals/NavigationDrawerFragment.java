@@ -1,6 +1,9 @@
 package com.akbarahmed.androiduifundamentals;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +17,18 @@ import android.view.ViewGroup;
 
 public class NavigationDrawerFragment extends Fragment {
 
+    // TODO: NEXT 2 VARS ARE FOR FUNCTIONALITY I DON'T WANT
+    private static final String PREFERENCES_FILE = "navigation_drawer_preferences";
+    private static final String USER_LEARNED_DRAWER = "userlearneddrawer";
+
     private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
+
+    // TODO: NEXT 2 VARS ARE FOR FUNCTIONALITY I DON'T WANT
+    // Indicates whether the user is aware of the drawer's existence
+    private boolean userLearnedDrawer = false;
+    // Indicates if the Fragment is being re-created from a prior instance
+    private boolean isFromSavedInstanceState = false;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -45,6 +58,15 @@ public class NavigationDrawerFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // TODO: BEGIN FUNCTIONALITY I DON'T WANT
+        Activity activity = getActivity();
+
+        userLearnedDrawer = Boolean.valueOf(getPreferences(activity, USER_LEARNED_DRAWER, "false"));
+        if (savedInstanceState != null) {
+            isFromSavedInstanceState = true;
+        }
+        // TODO: END FUNCTIONALITY I DON'T WANT
     }
 
     @Override
@@ -70,8 +92,9 @@ public class NavigationDrawerFragment extends Fragment {
         callbacks = null;
     }
 
-    public void setup(DrawerLayout layout, Toolbar toolbar) {
-        Activity activity = getActivity();
+    // TODO: Move this into newInstance() or into onCreate()
+    public void setup(int drawerContainer, DrawerLayout layout, Toolbar toolbar) {
+        final Activity activity = getActivity();
         drawerLayout = layout;
         int open = R.string.open;
         int close = R.string.close;
@@ -81,18 +104,76 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
+                Activity activity = getActivity();
+
+                // TODO: BEGIN FUNCTIONALITY I DON'T WANT
+                if (userLearnedDrawer) {
+                    userLearnedDrawer = true;
+                    setPreferences(activity, USER_LEARNED_DRAWER, Boolean.toString(userLearnedDrawer));
+                }
+                // TODO: END FUNCTIONALITY I DON'T WANT
+
+                // Hide the options menu in the app bar
+                activity.invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
 
+                Activity activity = getActivity();
+
+                // TODO: BEGIN FUNCTIONALITY I DON'T WANT
+
+                // TODO: END FUNCTIONALITY I DON'T WANT
+
+                activity.invalidateOptionsMenu();
             }
 
         };
 
+        // TODO: BEGIN FUNCTIONALITY I DON'T WANT
+        if (!userLearnedDrawer && !isFromSavedInstanceState) {
+            View container = getActivity().findViewById(drawerContainer);
+            drawerLayout.openDrawer(container);
+        }
+        // TODO: END FUNCTIONALITY I DON'T WANT
+
         drawerLayout.setDrawerListener(drawerToggle);
+
+        drawerLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                drawerToggle.syncState();
+            }
+        });
     }
+
+    // TODO: BEGIN FUNCTIONALITY I DON'T WANT
+
+    public static void setPreferences(Context context, String key, String value) {
+        SharedPreferences preferences = context
+                .getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        Editor editor = preferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+
+        // Shorter form of the above without single use variables
+        /*
+        context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+                .edit()
+                .putString(key, value)
+                .apply();
+        */
+    }
+
+    public static String getPreferences(Context context, String key, String defaultValue) {
+        SharedPreferences preferences = context
+                .getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return preferences.getString(key, defaultValue);
+    }
+
+    // TODO: END FUNCTIONALITY I DON'T WANT
 
     public interface Callbacks {
         public void onFragmentInteraction(Uri uri);
