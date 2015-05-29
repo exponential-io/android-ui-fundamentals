@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Android UI Fundamentals</string>
+    <string name="app_name">UI</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="action_next">Next</string>
+    <string name="title_activity_b">BActivity</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
 </resources>

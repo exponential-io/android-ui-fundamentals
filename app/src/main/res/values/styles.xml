@@ -2,16 +2,34 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
         <!-- Customize your theme here. -->
-
     </style>
 
-    <!-- Base application theme. -->
+    <style name="Exponential.AppBar" parent="Exponential.AppBar.Base">
+    </style>
+
+    <style name="Exponential.AppBar.Popup" parent="Exponential.AppBar.Popup.Base">
+    </style>
+
+    <!-- Base application themes -->
+
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="colorPrimary">@color/primary_material_light</item>
         <item name="colorPrimaryDark">@color/primary_dark_material_light</item>
         <item name="colorAccent">@color/accent_material_light</item>
+        <!--<item name="android:actionBarStyle">@style/Exponential.AppBar.Base</item>-->
     </style>
 
+    <style name="Exponential.AppBar.Base" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#00FF00</item>
+        <item name="android:background">#333333</item>
+    </style>
+
+    <style name="Exponential.AppBar.Popup.Base" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">#333333</item>
+        <item name="android:textColorSecondary">#00FF00</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
 </resources>
