@@ -1,14 +1,19 @@
 package com.akbarahmed.androiduifundamentals;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationDrawerFragment.Callbacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +22,17 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.activity_main_app_bar);
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(true);
+
+        FragmentManager fm = getSupportFragmentManager();
+
+        NavigationDrawerFragment navigationDrawer = (NavigationDrawerFragment)
+                fm.findFragmentById(R.id.activity_main_navigation_drawer);
+
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        navigationDrawer.setup(drawerLayout, toolbar);
     }
 
     @Override
@@ -41,5 +57,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Callbacks
+
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // do nothing
     }
 }

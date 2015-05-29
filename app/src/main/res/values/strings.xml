@@ -5,6 +5,9 @@
     <string name="placeholder">Placeholder</string>
     <string name="action_next">Next</string>
     <string name="title_activity_b">BActivity</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 
-    <string name="hello_world">Hello world!</string>
+
+
 </resources>
