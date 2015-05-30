@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class NavigationDrawerFragment extends Fragment {
     private static final String PREFERENCES_FILE = "navigation_drawer_preferences";
     private static final String USER_LEARNED_DRAWER = "userlearneddrawer";
 
-    private ActionBarDrawerToggle drawerToggle;
+//    private ActionBarDrawerToggle drawerToggle;
     private DrawerLayout drawerLayout;
 
     // TODO: NEXT 2 VARS ARE FOR FUNCTIONALITY I DON'T WANT
@@ -30,19 +31,18 @@ public class NavigationDrawerFragment extends Fragment {
     // Indicates if the Fragment is being re-created from a prior instance
     private boolean isFromSavedInstanceState = false;
 
+    private ActionBarDrawerToggle drawerToggle;
+
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
-    private String mParam2;
 
     private Callbacks callbacks;
 
-    public static NavigationDrawerFragment newInstance(String param1, String param2) {
+    public static NavigationDrawerFragment newInstance(String param1) {
         NavigationDrawerFragment fragment = new NavigationDrawerFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,7 +56,6 @@ public class NavigationDrawerFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
         // TODO: BEGIN FUNCTIONALITY I DON'T WANT
@@ -73,7 +72,7 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        return inflater.inflate(R.layout.navigation_drawer, container, false);
     }
 
     @Override
@@ -92,19 +91,27 @@ public class NavigationDrawerFragment extends Fragment {
         callbacks = null;
     }
 
+//    public void checkContext(Activity context) {
+//        Activity activity = getActivity();
+//        if (context == activity) {
+//            // This is true
+//            Log.v("XXX", "ActivityName.this == getActivity()");
+//        }
+//    }
+
     // TODO: Move this into newInstance() or into onCreate()
-    public void setup(int drawerContainer, DrawerLayout layout, Toolbar toolbar) {
-        final Activity activity = getActivity();
+    public void setup(Activity context, int drawerContainer, DrawerLayout layout, Toolbar toolbar) {
+//        final Activity activity = getActivity();
+        final Activity activity = context;
         drawerLayout = layout;
         int open = R.string.open;
         int close = R.string.close;
+
         drawerToggle = new ActionBarDrawerToggle(activity, layout, toolbar, open, close) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-
-                Activity activity = getActivity();
 
                 // TODO: BEGIN FUNCTIONALITY I DON'T WANT
                 if (userLearnedDrawer) {
@@ -113,7 +120,7 @@ public class NavigationDrawerFragment extends Fragment {
                 }
                 // TODO: END FUNCTIONALITY I DON'T WANT
 
-                // Hide the options menu in the app bar
+                // creates call to onPrepareOptionsMenu()
                 activity.invalidateOptionsMenu();
             }
 
@@ -121,12 +128,11 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
 
-                Activity activity = getActivity();
-
                 // TODO: BEGIN FUNCTIONALITY I DON'T WANT
 
                 // TODO: END FUNCTIONALITY I DON'T WANT
 
+                // creates call to onPrepareOptionsMenu()
                 activity.invalidateOptionsMenu();
             }
 
@@ -134,7 +140,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         // TODO: BEGIN FUNCTIONALITY I DON'T WANT
         if (!userLearnedDrawer && !isFromSavedInstanceState) {
-            View container = getActivity().findViewById(drawerContainer);
+            View container = activity.findViewById(drawerContainer);
             drawerLayout.openDrawer(container);
         }
         // TODO: END FUNCTIONALITY I DON'T WANT
@@ -150,7 +156,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     // TODO: BEGIN FUNCTIONALITY I DON'T WANT
-
     public static void setPreferences(Context context, String key, String value) {
         SharedPreferences preferences = context
                 .getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
@@ -172,7 +177,6 @@ public class NavigationDrawerFragment extends Fragment {
                 .getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         return preferences.getString(key, defaultValue);
     }
-
     // TODO: END FUNCTIONALITY I DON'T WANT
 
     public interface Callbacks {
